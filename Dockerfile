@@ -10,6 +10,11 @@ LABEL maintainer="alex-phillips"
 # copy patches
 COPY patches/ /defaults/patches/
 
+# Add alpine edge package repo to get latest rtorrent and working xmlrpc
+COPY repositories /etc/apk/repositories
+RUN apk update
+RUN apk add xmlrpc-c rtorrent
+
 RUN \
  echo "**** install build packages ****" && \
  apk add --no-cache --virtual=build-dependencies \
@@ -35,11 +40,15 @@ RUN \
 	php7-zip \
 	procps \
 	python3 \
-	rtorrent \
 	screen \
 	sox \
 	unrar \
 	zip && \
+echo "**** install pip ****" && \
+    python3 -m ensurepip && \
+    rm -r /usr/lib/python*/ensurepip && \
+    pip3 install --no-cache --upgrade pip setuptools wheel && \
+    if [ ! -e /usr/bin/pip ]; then ln -s pip3 /usr/bin/pip ; fi && \
  echo "**** install pip packages ****" && \
  pip3 install --no-cache-dir -U \
 	cfscrape \
