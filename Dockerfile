@@ -58,6 +58,7 @@ echo "**** install pip ****" && \
 	RUTORRENT_RELEASE=$(curl -sX GET "https://api.github.com/repos/Novik/ruTorrent/releases/latest" \
 	| awk '/tag_name/{print $4;exit}' FS='[""]'); \
  fi && \
+ RUTORRENT_RELEASE="v3.10-beta" && \
  curl -o \
  /tmp/rutorrent.tar.gz -L \
 	"https://github.com/Novik/rutorrent/archive/${RUTORRENT_RELEASE}.tar.gz" && \
